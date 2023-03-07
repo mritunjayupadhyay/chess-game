@@ -1,4 +1,13 @@
-export const theme = {
+interface ITheme {
+    lightBackground: string;
+    darkBackground: string;
+    primaryColor: string;
+    fontFamily: string;
+    desktop: string;
+    tablet: string;
+    mobile: string;
+}
+export const theme: ITheme = {
     lightBackground: "#eeeed2",
     darkBackground: "#769656",
     primaryColor: "#444",

@@ -5,5 +5,8 @@ export const GameStyle = styled.div`
     flex-direction: column;
     width: 100%;
     min-height: 100vh;
-    background: ${props => props.theme.darkBackground}
+`;
+
+export const ChessBoardContainer = styled.div`
+   padding: 20px 0;
 `
