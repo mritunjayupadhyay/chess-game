@@ -1,6 +1,7 @@
 import { HorizontalKeys, VerticalKeys } from "../../App.constant";
 import { Box } from "../../components/box/box";
 import './chessboard.scss';
+import { ChessBoardContent, ChessBoardStyled } from "./chessboard_styled";
 
 function ChessBoard() {
     let boardBoxes = [];
@@ -10,11 +11,11 @@ function ChessBoard() {
         }
     }
     return (
-        <div className="chessboard">
-            <div className="container-boxes">
+        <ChessBoardStyled>
+            <ChessBoardContent>
                 {boardBoxes}
-            </div>
-        </div>
+            </ChessBoardContent>
+        </ChessBoardStyled>
     );
 }
 

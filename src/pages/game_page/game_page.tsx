@@ -1,14 +1,15 @@
 import { ChessBoard } from "../../containers/chessboard/chessboard";
 import './game_page.scss'
+import { ChessBoardContainer, GameStyle } from "./game_styled";
 function GamePage() {
     return (
-        <div className="GamePage">
+        <GameStyle>
             <div>Player One</div>
-            <div className="chess-board-container">
-            <ChessBoard />
-            </div>
+            <ChessBoardContainer>
+                <ChessBoard />
+            </ChessBoardContainer>
             <div>Player Two</div>
-        </div>
+        </GameStyle>
     );
 }
 
