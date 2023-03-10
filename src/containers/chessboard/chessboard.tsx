@@ -1,3 +1,5 @@
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { HorizontalKeys, VerticalKeys } from "../../App.constant";
 import { Box } from "../../components/box/box";
 import { IPosition } from "../../interfaces/position.interface";
@@ -22,9 +24,12 @@ function ChessBoard() {
     }
     return (
         <ChessBoardStyled>
+            <DndProvider backend={HTML5Backend}>
             <ChessBoardContent>
                 {boardBoxes}
             </ChessBoardContent>
+            </DndProvider>
+            
         </ChessBoardStyled>
     );
 }
