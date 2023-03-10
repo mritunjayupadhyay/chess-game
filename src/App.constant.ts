@@ -11,5 +11,19 @@ export enum pieceType {
     KING = "KING"
 }
 
+export enum piecePoint {
+    PAWN = 1,
+    KNIGHT = 3,
+    BISHOP = 3,
+    ROOK = 5,
+    QUEEN = 9,
+    KING = 1000
+}
+
 export const LightColor: colorType = 'light';
 export const DarkColor: colorType = 'dark';
+
+export enum allColorType {
+    LIGHT_COLOR = "light",
+    DARK_COLOR = "dark"
+}
