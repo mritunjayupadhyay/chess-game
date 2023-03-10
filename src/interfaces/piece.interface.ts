@@ -4,4 +4,6 @@ export interface IPiece {
     position: IPosition;
     color: colorType;
     type: pieceType;
+    isAlive: boolean;
+    points: number;
 }

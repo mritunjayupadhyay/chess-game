@@ -1,15 +1,19 @@
+import { IPiece } from './../interfaces/piece.interface';
 import { createSlice } from "@reduxjs/toolkit";
+import { pieceData } from './initialData/piece.data';
 
 interface IInitialState {
     activePlayer: string;
     winner: string | undefined;
     draw: boolean;
+    pieces: IPiece[]
 }
 
 const initialState:IInitialState = {
     activePlayer: 'light',
     winner: undefined,
-    draw: false
+    draw: false,
+    pieces: pieceData
 }
 
 function createReducers() {

@@ -4,6 +4,8 @@ import { gameReducer } from './game.slice';
 import { pieceReducer } from './piece.slice';
 import { positionReducer } from './position.slice';
 
+
+
 export const store = configureStore({
     reducer: {
         game: gameReducer,
@@ -12,3 +14,5 @@ export const store = configureStore({
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
+
+export type RootState = ReturnType<typeof store.getState>

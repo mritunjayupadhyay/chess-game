@@ -1,6 +1,9 @@
-import { DarkColor, LightColor, pieceType } from "../../App.constant";
+import { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import { allColorType } from "../../App.constant";
 import { IPiece } from "../../interfaces/piece.interface";
 import { IPosition } from "../../interfaces/position.interface";
+import { RootState } from "../../store";
 import { Piece } from "../piece/piece";
 import { BoxStyled, HiddenLabel } from "./box_styled";
 
@@ -10,17 +13,25 @@ export interface IBoxProps {
 }
 
 function Box(props: IBoxProps) {
-    const p: IPiece = {
-        position: { x: 1, y: 1},
-        color: "light",
-        type: pieceType.BISHOP
-    }
-    console.log("the props we have", props);
-    let boxColor = ((props.position.x + props.position.y) % 2) === 0 ? DarkColor : LightColor;
+    const initialPieceData: IPiece[] = [];
+    const [pieceData, setPiecesData] = useState(initialPieceData);
+    const pieces = useSelector((state: RootState) => state.piece.pieces);
+    const p: IPiece[] = useMemo(() => {
+        return pieces.filter((item) => {
+            return (item.position.x === props.position.x)
+            && (item.position.y === props.position.y)
+        });
+    }, [pieces, props.position]);
+
+    useEffect(() => {
+        setPiecesData([...p])
+    }, [p]);
+
+    let boxColor = ((props.position.x + props.position.y) % 2) === 0 ? allColorType.DARK_COLOR : allColorType.LIGHT_COLOR;
     return (
         <BoxStyled color={boxColor}>
             <HiddenLabel>{props.label}</HiddenLabel>
-            <Piece {...p} />
+            { pieceData.length ? <Piece {...pieceData[0]} /> : null}
         </BoxStyled>
     )
 }
