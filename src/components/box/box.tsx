@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useDrop } from "react-dnd";
 import { useSelector } from "react-redux";
 import { allColorType } from "../../App.constant";
 import { IPiece } from "../../interfaces/piece.interface";
@@ -28,8 +29,20 @@ function Box(props: IBoxProps) {
     }, [p]);
 
     let boxColor = ((props.position.x + props.position.y) % 2) === 0 ? allColorType.DARK_COLOR : allColorType.LIGHT_COLOR;
+    const [{ isOver, canDrop }, drop] = useDrop(
+        () => ({
+          accept: 'piece',
+          drop: () => true,
+          canDrop: () => true,
+          collect: (monitor) => ({
+            isOver: !!monitor.isOver(),
+            canDrop: !!monitor.canDrop()
+          })
+        })
+    )
+
     return (
-        <BoxStyled color={boxColor}>
+        <BoxStyled ref={drop} color={boxColor}>
             <HiddenLabel>{props.label}</HiddenLabel>
             { pieceData.length ? <Piece {...pieceData[0]} /> : null}
         </BoxStyled>

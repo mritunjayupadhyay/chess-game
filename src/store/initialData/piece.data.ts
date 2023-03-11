@@ -2,6 +2,10 @@ import { pieceType, allColorType, piecePoint } from '../../App.constant';
 import { IPiece } from './../../interfaces/piece.interface';
 export const pieceData: IPiece[] = [];
 
+// This is example of rook at chess.com. Here the size can be different for different screen. (50. 100, 150)
+// In future we can use these as it is more good looking.
+// https://www.chess.com/chess-themes/pieces/neo/50/br.png
+
 // Add King
 pieceData.push({
     position: {x: 4, y: 0},

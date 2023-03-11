@@ -11,4 +11,5 @@ export const PieceStyled = styled("div")<IPieceImage>`
     background-size: 60%;
     background-repeat: no-repeat;
     background-position: center;
+    opacity: ${props => props.isDragging ? 0.1 : 1};
 `;
