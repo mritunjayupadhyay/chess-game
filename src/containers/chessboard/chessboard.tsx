@@ -1,29 +1,28 @@
-import { HorizontalKeys, VerticalKeys } from "../../App.constant";
+import { useSelector } from "react-redux";
 import { Box } from "../../components/box/box";
-import { IPosition } from "../../interfaces/position.interface";
+import { RootState } from "../../store";
 import './chessboard.scss';
 import { ChessBoardContent, ChessBoardStyled } from "./chessboard_styled";
 
 function ChessBoard() {
-    let boardBoxes = [];
-    let boxLevel = '';
-    for (let j = VerticalKeys.length - 1; j >= 0; j--) {
-        for (let i = 0; i < HorizontalKeys.length; i++) {
-            let boxPosition: IPosition = { x: i, y: j };
-            boxLevel = `${VerticalKeys[j]}${HorizontalKeys[i]}`;
-            boardBoxes.push(
-                <Box
-                    key={boxLevel}
-                    position={boxPosition}
-                    label={boxLevel}
-                />
-            )
-        }
+
+     // Get all Boxes from store
+     const boardBoxes = useSelector((state: RootState) => state.position.allPositions)
+
+    // Render Boxes with store Data
+    const renderBoxes = () => {
+        return boardBoxes.map((item) => {
+            return <Box
+                key={item.label}
+                position={item.position}
+                label={item.label}
+            />
+        })
     }
     return (
         <ChessBoardStyled>
             <ChessBoardContent>
-                {boardBoxes}
+                {renderBoxes()}
             </ChessBoardContent>
         </ChessBoardStyled>
     );

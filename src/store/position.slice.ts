@@ -1,15 +1,18 @@
+import { allBoxPositions } from './initialData/position.data';
+import { IPiece } from './../interfaces/piece.interface';
 import { createSlice } from "@reduxjs/toolkit";
+import { IBoxPosition } from '../interfaces/position.interface';
 
 interface IInitialState {
-    activePlayer: string;
-    winner: string | undefined;
-    draw: boolean;
+    activePiece: IPiece | undefined;
+    allPositions: IBoxPosition[];
+    allPossibleVisitingBoxes: IBoxPosition[];
 }
 
 const initialState:IInitialState = {
-    activePlayer: 'light',
-    winner: undefined,
-    draw: false
+    activePiece: undefined,
+    allPositions: allBoxPositions,
+    allPossibleVisitingBoxes: []
 }
 
 function createReducers() {
@@ -18,7 +21,7 @@ function createReducers() {
     };
 
     function nextMove(state: IInitialState) {
-        state.activePlayer = 'dark';
+        // state.activePlayer = 'dark';
     }
 }
 

@@ -9,8 +9,8 @@ import { positionReducer } from './position.slice';
 export const store = configureStore({
     reducer: {
         game: gameReducer,
+        position: positionReducer,
         piece: pieceReducer,
-        position: positionReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
