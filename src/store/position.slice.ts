@@ -1,6 +1,6 @@
 import { allBoxAsObj } from './initialData/position.data';
 import { IPiece } from './../interfaces/piece.interface';
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IBoxPosition } from '../interfaces/position.interface';
 
 interface IInitialState {
@@ -17,11 +17,16 @@ const initialState:IInitialState = {
 
 function createReducers() {
     return {
-        nextMove
+        nextMove,
+        makePieceActive
     };
 
     function nextMove(state: IInitialState) {
         // state.activePlayer = 'dark';
+    }
+    function makePieceActive(state: IInitialState, action: PayloadAction<IPiece>) {
+        console.log("this call is from makePieceActive")
+        state.activePiece = action.payload;
     }
 }
 
