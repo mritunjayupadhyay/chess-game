@@ -11,4 +11,10 @@ export const PieceStyled = styled("div")<IPieceImage>`
     background-size: 60%;
     background-repeat: no-repeat;
     background-position: center;
+    &:hover {
+        cursor: grab;
+    }
+    &:active {
+        cursor: grabbing;
+    }
 `;
