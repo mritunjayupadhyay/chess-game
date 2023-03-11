@@ -1,18 +1,18 @@
-import { allBoxPositions } from './initialData/position.data';
+import { allBoxAsObj } from './initialData/position.data';
 import { IPiece } from './../interfaces/piece.interface';
 import { createSlice } from "@reduxjs/toolkit";
 import { IBoxPosition } from '../interfaces/position.interface';
 
 interface IInitialState {
     activePiece: IPiece | undefined;
-    allPositions: IBoxPosition[];
-    allPossibleVisitingBoxes: IBoxPosition[];
+    allPositions: Record<string, IBoxPosition>;
+    allPossibleVisitingBoxes: Record<string, IBoxPosition>;
 }
 
 const initialState:IInitialState = {
     activePiece: undefined,
-    allPositions: allBoxPositions,
-    allPossibleVisitingBoxes: []
+    allPositions: allBoxAsObj,
+    allPossibleVisitingBoxes: {}
 }
 
 function createReducers() {

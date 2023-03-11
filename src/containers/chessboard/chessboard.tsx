@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { Box } from "../../components/box/box";
 import { RootState } from "../../store";
+import { allBoxAsObj } from "../../store/initialData/position.data";
 import './chessboard.scss';
 import { ChessBoardContent, ChessBoardStyled } from "./chessboard_styled";
 
@@ -11,14 +12,21 @@ function ChessBoard() {
 
     // Render Boxes with store Data
     const renderBoxes = () => {
-        return boardBoxes.map((item) => {
-            return <Box
-                key={item.label}
+        const boxesToRender = [];
+        for (const boxKey in boardBoxes) {
+            let item = boardBoxes[boxKey]
+            boxesToRender.push(
+                <Box
+                key={boxKey}
                 position={item.position}
                 label={item.label}
+                piece={item.piece}
             />
-        })
+            )
+        }
+       return boxesToRender;
     }
+    console.log("allBoxAsMap", allBoxAsObj);
     return (
         <ChessBoardStyled>
             <ChessBoardContent>
