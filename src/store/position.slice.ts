@@ -1,7 +1,8 @@
+import { getLabel } from './../helpers/label.helper';
 import { allBoxAsObj } from './initialData/position.data';
 import { IPiece } from './../interfaces/piece.interface';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IBoxPosition } from '../interfaces/position.interface';
+import { IBoxPosition, IPosition } from '../interfaces/position.interface';
 import { getPossibleMove, IGetAllPossibleMove } from '../logic';
 
 interface IInitialState {
@@ -20,12 +21,30 @@ const initialState:IInitialState = {
 
 function createReducers() {
     return {
-        nextMove,
+        moveToVisitingBox,
+        makePieceInActive,
         makePieceActive
     };
 
-    function nextMove(state: IInitialState) {
+    function moveToVisitingBox(state: IInitialState, action: PayloadAction<IPosition>) {
         // state.activePlayer = 'dark';
+        const newPosition = action.payload;
+        const label = getLabel(newPosition.x, newPosition.y);
+        const { activePiece } = state;
+        if (activePiece) {
+            const activePieceLabel = getLabel(activePiece.position.x, activePiece.position.y);
+            state.allPositions[label].piece = activePiece;
+            state.allPositions[activePieceLabel].piece = undefined;
+            state.activePiece = undefined;
+            state.allPossibleKillBoxes = {};
+            state.allPossibleVisitingBoxes = {};
+        }
+        
+    }
+    function makePieceInActive(state: IInitialState) {
+        state.activePiece = undefined;
+        state.allPossibleKillBoxes = {};
+        state.allPossibleVisitingBoxes = {};
     }
     function makePieceActive(state: IInitialState, action: PayloadAction<IPiece>) {
         console.log("this call is from makePieceActive")

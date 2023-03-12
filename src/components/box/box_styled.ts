@@ -2,16 +2,18 @@ import { allColorType, colorType } from './../../App.constant';
 import styled from 'styled-components';
 export interface IBoxStyledProp {
   color: colorType,
-  active: boolean
+  active: boolean,
+  clickable: boolean
 }
 export const BoxStyled = styled("div") <IBoxStyledProp>`
   position: relative;
+  cursor: ${props => props.clickable ? "pointer" : "default"};
   background-color: ${props => {
     if (props.active) {
       return 'rgba(255, 255, 0, 0.5)'
     }
     return props.color === allColorType.LIGHT_COLOR ? props.theme.lightBackground : props.theme.darkBackground
-  }}
+  }};
 `;
 
 export const HiddenLabel = styled("label")`
