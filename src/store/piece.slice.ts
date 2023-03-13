@@ -1,6 +1,7 @@
 import { IPiece } from './../interfaces/piece.interface';
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { pieceData } from './initialData/piece.data';
+import { IPositionAndPiece } from '../interfaces';
 
 interface IInitialState {
     activeColor: string;
@@ -18,11 +19,20 @@ const initialState:IInitialState = {
 
 function createReducers() {
     return {
-        nextMove
+        changePosition
     };
 
-    function nextMove(state: IInitialState) {
-        state.activeColor = 'dark';
+    function changePosition(state: IInitialState, action: PayloadAction<IPositionAndPiece>) {
+        const newPosition = {...action.payload.position};
+        const piece = action.payload.piece;
+        const pieces = state.pieces.map((item) => {
+            if (item.position.x === piece.position.x 
+            && item.position.y === piece.position.y) {
+                return {...piece, position: newPosition };
+            }
+            return item;
+        });
+        state.pieces = pieces;
     }
 }
 

@@ -27,13 +27,12 @@ function createReducers() {
     };
 
     function moveToVisitingBox(state: IInitialState, action: PayloadAction<IPosition>) {
-        // state.activeColor = 'dark';
-        const newPosition = action.payload;
+        const newPosition = {...action.payload};
         const label = getLabel(newPosition.x, newPosition.y);
-        const { activePiece } = state;
-        if (activePiece) {
-            const activePieceLabel = getLabel(activePiece.position.x, activePiece.position.y);
-            state.allPositions[label].piece = activePiece;
+        if (state.activePiece !== undefined) {
+            const newActivePiece  = {...state.activePiece, position: newPosition};
+            const activePieceLabel = getLabel(state.activePiece?.position.x, state.activePiece.position.y);
+            state.allPositions[label].piece = newActivePiece;
             state.allPositions[activePieceLabel].piece = undefined;
             state.activePiece = undefined;
             state.allPossibleKillBoxes = {};
