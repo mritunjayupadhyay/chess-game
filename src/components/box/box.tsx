@@ -1,37 +1,47 @@
-import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { allColorType } from "../../App.constant";
 import { IPiece } from "../../interfaces/piece.interface";
 import { IPosition } from "../../interfaces/position.interface";
 import { RootState } from "../../store";
+import { gameActions } from "../../store/game.slice";
+import { pieceActions } from "../../store/piece.slice";
+import { positionActions } from "../../store/position.slice";
 import { Piece } from "../piece/piece";
-import { BoxStyled, HiddenLabel } from "./box_styled";
+import { BoxStyled, CanKillDiv, CanVisitDiv, HiddenLabel } from "./box_styled";
 
 export interface IBoxProps {
     position: IPosition;
     label: string;
+    piece?: IPiece;
+    active: boolean;
+    canKill: boolean;
+    canVisit: boolean;
 }
 
 function Box(props: IBoxProps) {
-    const initialPieceData: IPiece[] = [];
-    const [pieceData, setPiecesData] = useState(initialPieceData);
-    const pieces = useSelector((state: RootState) => state.piece.pieces);
-    const p: IPiece[] = useMemo(() => {
-        return pieces.filter((item) => {
-            return (item.position.x === props.position.x)
-            && (item.position.y === props.position.y)
-        });
-    }, [pieces, props.position]);
-
-    useEffect(() => {
-        setPiecesData([...p])
-    }, [p]);
-
+    const dispatch = useDispatch();
+    const activePiece = useSelector((state: RootState) => state.position.activePiece);
+    const handleClick = () => {
+        if(!activePiece) return;
+        if (props.canVisit || props.canKill) {
+            dispatch(positionActions.moveToVisitingBox(props.position));
+            dispatch(pieceActions.changePosition({
+                position: props.position, piece: activePiece
+            }));
+            dispatch(gameActions.nextMove());   
+        } else {
+            dispatch(positionActions.makePieceInActive())
+        }
+    }
     let boxColor = ((props.position.x + props.position.y) % 2) === 0 ? allColorType.DARK_COLOR : allColorType.LIGHT_COLOR;
+    let clickable = !!props.piece || props.canVisit || props.canKill;
     return (
-        <BoxStyled color={boxColor}>
+        <BoxStyled onClick={() => handleClick()} clickable={clickable} color={boxColor} active={props.active}>
             <HiddenLabel>{props.label}</HiddenLabel>
-            { pieceData.length ? <Piece {...pieceData[0]} /> : null}
+            { props.piece ? <Piece {...props.piece} /> : null}
+            {props.canVisit ? <CanVisitDiv /> : null}
+            {props.canKill ? <CanKillDiv /> : null}
         </BoxStyled>
     )
 }

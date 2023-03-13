@@ -1,7 +1,7 @@
 import { pieceType, allColorType, piecePoint } from '../../App.constant';
 import { IPiece } from './../../interfaces/piece.interface';
 export const pieceData: IPiece[] = [];
-
+export const pieceDataObj: Record<string, IPiece> = {};
 // Add King
 pieceData.push({
     position: {x: 4, y: 0},

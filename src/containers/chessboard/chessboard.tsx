@@ -1,29 +1,55 @@
-import { HorizontalKeys, VerticalKeys } from "../../App.constant";
+import { useSelector } from "react-redux";
 import { Box } from "../../components/box/box";
-import { IPosition } from "../../interfaces/position.interface";
+import { RootState } from "../../store";
 import './chessboard.scss';
 import { ChessBoardContent, ChessBoardStyled } from "./chessboard_styled";
 
 function ChessBoard() {
-    let boardBoxes = [];
-    let boxLevel = '';
-    for (let j = VerticalKeys.length - 1; j >= 0; j--) {
-        for (let i = 0; i < HorizontalKeys.length; i++) {
-            let boxPosition: IPosition = { x: i, y: j };
-            boxLevel = `${VerticalKeys[j]}${HorizontalKeys[i]}`;
-            boardBoxes.push(
+
+     // Get all Boxes from store
+    const boardBoxes = useSelector((state: RootState) => state.position.allPositions);
+    const activePiece = useSelector((state: RootState) => state.position.activePiece);
+    const visitingPieces = useSelector((state: RootState) => state.position.allPossibleVisitingBoxes);
+    const killPieces = useSelector((state: RootState) => state.position.allPossibleKillBoxes);
+    // Render Boxes with store Data
+    const renderBoxes = () => {
+        const boxesToRender = [];
+        for (const boxKey in boardBoxes) {
+            let item = boardBoxes[boxKey];
+            let canKill = false;
+            let canVisit = false;
+            let active = false;
+            if ((item.position.x === activePiece?.position.x)
+            && (item.position.y === activePiece?.position.y)) {
+                active = true;
+            }
+            if (visitingPieces[boxKey]) {
+                console.log("visit piece", visitingPieces[boxKey])
+                canVisit = true;
+            }
+            if (killPieces[boxKey]) {
+                console.log("kill piece", killPieces[boxKey])
+                canVisit = false;
+                canKill = true;
+            }
+            boxesToRender.push(
                 <Box
-                    key={boxLevel}
-                    position={boxPosition}
-                    label={boxLevel}
-                />
+                key={boxKey}
+                position={item.position}
+                label={item.label}
+                piece={item.piece}
+                active={active}
+                canKill={canKill}
+                canVisit={canVisit}
+            />
             )
         }
+       return boxesToRender;
     }
     return (
         <ChessBoardStyled>
             <ChessBoardContent>
-                {boardBoxes}
+                {renderBoxes()}
             </ChessBoardContent>
         </ChessBoardStyled>
     );
