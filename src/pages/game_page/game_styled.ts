@@ -8,5 +8,9 @@ export const GameStyle = styled.div`
 `;
 
 export const ChessBoardContainer = styled.div`
-   padding: 20px 0;
+   position: relative;
+   width: 100%;
+   max-width: 800px;
+   overflow: hidden;
+   margin: 0px auto;
 `

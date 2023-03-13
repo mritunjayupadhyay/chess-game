@@ -30,6 +30,10 @@ function createReducers() {
             && item.position.y === piece.position.y) {
                 return {...piece, position: newPosition };
             }
+            // If it is a kill
+            if (item.position.x === newPosition.x && item.position.y === newPosition.y) {
+                return {...item, isAlive: false, position: {x: -1, y: -1}}
+            }
             return item;
         });
         state.pieces = pieces;
