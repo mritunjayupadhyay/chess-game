@@ -4,6 +4,7 @@ import { allColorType } from "../../App.constant";
 import { IPiece } from "../../interfaces/piece.interface";
 import { IPosition } from "../../interfaces/position.interface";
 import { RootState } from "../../store";
+import { gameActions } from "../../store/game.slice";
 import { positionActions } from "../../store/position.slice";
 import { Piece } from "../piece/piece";
 import { BoxStyled, CanKillDiv, CanVisitDiv, HiddenLabel } from "./box_styled";
@@ -23,7 +24,8 @@ function Box(props: IBoxProps) {
     const handleClick = () => {
         if(!activePiece) return;
         if (props.canVisit || props.canKill) {
-            dispatch(positionActions.moveToVisitingBox(props.position))
+            dispatch(positionActions.moveToVisitingBox(props.position));
+            dispatch(gameActions.nextMove());
         } else {
             dispatch(positionActions.makePieceInActive())
         }

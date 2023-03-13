@@ -3,14 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { pieceData } from './initialData/piece.data';
 
 interface IInitialState {
-    activePlayer: string;
+    activeColor: string;
     winner: string | undefined;
     draw: boolean;
     pieces: IPiece[]
 }
 
 const initialState:IInitialState = {
-    activePlayer: 'light',
+    activeColor: 'light',
     winner: undefined,
     draw: false,
     pieces: pieceData
@@ -22,7 +22,7 @@ function createReducers() {
     };
 
     function nextMove(state: IInitialState) {
-        state.activePlayer = 'dark';
+        state.activeColor = 'dark';
     }
 }
 

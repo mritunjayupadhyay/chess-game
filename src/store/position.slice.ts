@@ -27,7 +27,7 @@ function createReducers() {
     };
 
     function moveToVisitingBox(state: IInitialState, action: PayloadAction<IPosition>) {
-        // state.activePlayer = 'dark';
+        // state.activeColor = 'dark';
         const newPosition = action.payload;
         const label = getLabel(newPosition.x, newPosition.y);
         const { activePiece } = state;
