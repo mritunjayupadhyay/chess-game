@@ -1,5 +1,7 @@
 import { useSelector } from "react-redux";
+import { allColorType } from "../../App.constant";
 import { Box } from "../../components/box/box";
+import { FallenPieces } from "../../components/fallen-pieces/fallen_pieces";
 import { RootState } from "../../store";
 import './chessboard.scss';
 import { ChessBoardContent, ChessBoardStyled } from "./chessboard_styled";
