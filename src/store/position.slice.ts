@@ -46,7 +46,6 @@ function createReducers() {
         state.allPossibleVisitingBoxes = {};
     }
     function makePieceActive(state: IInitialState, action: PayloadAction<IPiece>) {
-        console.log("this call is from makePieceActive")
         const allBoxesCloned = {...state.allPositions};
         const getPossibleMoveArgs: IGetAllPossibleMove = {
             allBoxes: allBoxesCloned,

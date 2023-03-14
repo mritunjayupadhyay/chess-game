@@ -1,6 +1,7 @@
 import { IPiece } from './../interfaces/piece.interface';
 import { IBoxPosition } from '../interfaces/position.interface';
 import * as pawnLogic from './pawn.logic';
+import * as knightLogic from './knight.logic';
 import { pieceType } from '../App.constant';
 
 export interface IGetAllPossibleMove {
@@ -18,6 +19,9 @@ const getPossibleMove = (getPossibleMoveArgs: IGetAllPossibleMove)
 
     if (getPossibleMoveArgs.piece.type === pieceType.PAWN) {
         return pawnLogic.getPossibleMove(getPossibleMoveArgs)
+    }
+    if (getPossibleMoveArgs.piece.type === pieceType.KNIGHT) {
+        return knightLogic.getPossibleMove(getPossibleMoveArgs)
     }
     return {
         allPossibleVisitingBoxes,

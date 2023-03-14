@@ -13,7 +13,6 @@ function FallenPieces(props: IColor) {
     const opponentPoint = opponentPieces.reduce((sum, item) => sum + item.points, 0)
     const point = opponentPoint - ourPoint;
     const renderAllPieces = () => {
-        console.log("opponent pieces", opponentPieces, props.color)
         return opponentPieces.map((item) => {
             const pieceUrl = getImageUrl(item.type, item.color);
             return (
@@ -30,7 +29,7 @@ function FallenPieces(props: IColor) {
                 <NameContainer>Player {props.color}</NameContainer>
                 <PieceListContainer>
                     {renderAllPieces()}
-                    {point > 0 ? <NumberContainer>{point} +</NumberContainer> : null}
+                    {point > 0 ? <NumberContainer>{point}+</NumberContainer> : null}
                 </PieceListContainer>
             </NameAndPiecesContainer>
         </FallenPieceStyled>
