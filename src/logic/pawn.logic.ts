@@ -46,7 +46,6 @@ const getPossibleMove = (getPossibleMoveArgs: IGetAllPossibleMove)
         const steps = piece.color === allColorType.LIGHT_COLOR ? 1 : -1;
         const label = getLabel(piece.position.x + leftRight, piece.position.y + steps);
         const box = allBoxes[label];
-        console.log("box we have", box, i, label, allBoxes);
         if (box && box.piece !== undefined && box.piece.color !== piece.color) { // Any piece exist in way and not my team
             allPossibleKillBoxes[label] = box;
         }

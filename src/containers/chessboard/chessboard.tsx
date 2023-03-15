@@ -1,7 +1,5 @@
 import { useSelector } from "react-redux";
-import { allColorType } from "../../App.constant";
 import { Box } from "../../components/box/box";
-import { FallenPieces } from "../../components/fallen-pieces/fallen_pieces";
 import { RootState } from "../../store";
 import './chessboard.scss';
 import { ChessBoardContent, ChessBoardStyled } from "./chessboard_styled";
@@ -26,11 +24,9 @@ function ChessBoard() {
                 active = true;
             }
             if (visitingPieces[boxKey]) {
-                console.log("visit piece", visitingPieces[boxKey])
                 canVisit = true;
             }
             if (killPieces[boxKey]) {
-                console.log("kill piece", killPieces[boxKey])
                 canVisit = false;
                 canKill = true;
             }

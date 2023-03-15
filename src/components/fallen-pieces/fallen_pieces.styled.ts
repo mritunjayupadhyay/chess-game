@@ -37,6 +37,7 @@ export const PieceListContainer = styled("div")`
     display: flex;
     justify-content: flex-start;
     flex-direction: row;
+    align-items: center;
 `;
 
 export const EachPiece = styled("img")`
@@ -46,8 +47,9 @@ export const EachPiece = styled("img")`
 `;
 
 export const NumberContainer = styled("div")`
-    line-height: 20px;
-    font-size: 12px;
+    font-size: 13px;
+    padding-left: 3px;
+    letter-spacing: 1px;
 `;
 
 
