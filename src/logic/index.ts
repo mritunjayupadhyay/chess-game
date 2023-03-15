@@ -29,7 +29,12 @@ const getPossibleMove = (getPossibleMoveArgs: IGetAllPossibleMove)
         case pieceType.ROOK:
             return rookLogic.getPossibleMove(getPossibleMoveArgs);
         case pieceType.QUEEN:
-            return queenLogic.getPossibleMove(getPossibleMoveArgs);
+            const bishopBoxes = bishopLogic.getPossibleMove(getPossibleMoveArgs);
+            const rookBoxes = rookLogic.getPossibleMove(getPossibleMoveArgs);
+            return {
+                allPossibleKillBoxes: { ...bishopBoxes.allPossibleKillBoxes, ...rookBoxes.allPossibleKillBoxes},
+                allPossibleVisitingBoxes: { ...bishopBoxes.allPossibleVisitingBoxes, ...rookBoxes.allPossibleVisitingBoxes }
+            }
         default:
             return {
                 allPossibleVisitingBoxes,
