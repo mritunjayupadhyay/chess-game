@@ -2,7 +2,6 @@ import { checkIfOutside } from './../helpers/position.helper';
 import { getLabel } from './../helpers/label.helper';
 import { IGetAllPossibleMove } from ".";
 import { IBoxPosition } from "../interfaces/position.interface";
-import { HorizontalKeys } from '../App.constant';
 
 // Knight can have maximum 8 moves in if have space. 
 // In all four direction he can move two steps forward (4 variation).

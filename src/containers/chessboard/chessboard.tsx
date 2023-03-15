@@ -24,11 +24,9 @@ function ChessBoard() {
                 active = true;
             }
             if (visitingPieces[boxKey]) {
-                console.log("visit piece", visitingPieces[boxKey])
                 canVisit = true;
             }
             if (killPieces[boxKey]) {
-                console.log("kill piece", killPieces[boxKey])
                 canVisit = false;
                 canKill = true;
             }
