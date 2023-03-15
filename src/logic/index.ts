@@ -4,7 +4,8 @@ import * as pawnLogic from './pawn.logic';
 import * as knightLogic from './knight.logic';
 import * as bishopLogic from './bishop.logic';
 import * as rookLogic from './rook.logic';
-import * as queenLogic from './queen.logic';
+import * as kingLogic from './kings.logic';
+
 import { pieceType } from '../App.constant';
 
 export interface IGetAllPossibleMove {
@@ -32,9 +33,11 @@ const getPossibleMove = (getPossibleMoveArgs: IGetAllPossibleMove)
             const bishopBoxes = bishopLogic.getPossibleMove(getPossibleMoveArgs);
             const rookBoxes = rookLogic.getPossibleMove(getPossibleMoveArgs);
             return {
-                allPossibleKillBoxes: { ...bishopBoxes.allPossibleKillBoxes, ...rookBoxes.allPossibleKillBoxes},
+                allPossibleKillBoxes: { ...bishopBoxes.allPossibleKillBoxes, ...rookBoxes.allPossibleKillBoxes },
                 allPossibleVisitingBoxes: { ...bishopBoxes.allPossibleVisitingBoxes, ...rookBoxes.allPossibleVisitingBoxes }
             }
+        case pieceType.KING:
+            return kingLogic.getPossibleMove(getPossibleMoveArgs);
         default:
             return {
                 allPossibleVisitingBoxes,
