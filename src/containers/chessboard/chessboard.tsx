@@ -45,6 +45,7 @@ function ChessBoard() {
                 canKill={canKill}
                 canVisit={canVisit}
                 canCastle={canCastle}
+                castlingData={castlingBoxes[boxKey]}
             />
             )
         }

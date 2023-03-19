@@ -28,11 +28,32 @@ const initialState:IInitialState = {
 
 function createReducers() {
     return {
+        moveInCastling,
         moveToVisitingBox,
         makePieceInActive,
         makePieceActive,
         getKingCastlingAndDangerBoxes
     };
+
+    function moveInCastling(state: IInitialState, action: PayloadAction<ICastlingBox>) {
+        const { king, rook, kingNextPosition, rookNextPosition } = action.payload;
+        if (king !== undefined && rook !== undefined) {
+            const newKingPiece = { ...king, position: kingNextPosition };
+            const newRookPiece = { ...rook, position: rookNextPosition };
+            const kingLabel = getLabel(king.position.x, king.position.y);
+            const rookLabel = getLabel(rook.position.x, rook.position.y);
+            const newKingLabel = getLabel(kingNextPosition.x, kingNextPosition.y);
+            const newRookLabel = getLabel(rookNextPosition.x, rookNextPosition.y);
+            state.allPositions[newKingLabel] = newKingPiece;
+            state.allPositions[newRookLabel] = newRookPiece;
+            state.allPositions[kingLabel].piece = undefined;
+            state.allPositions[rookLabel].piece = undefined;
+            state.activePiece = undefined;
+            state.allPossibleKillBoxes = {};
+            state.allPossibleVisitingBoxes = {};
+            state.castlingBoxes = {}
+        }
+    }
 
     function moveToVisitingBox(state: IInitialState, action: PayloadAction<IPosition>) {
         const newPosition = {...action.payload};
