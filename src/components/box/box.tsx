@@ -1,6 +1,8 @@
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { allColorType } from "../../App.constant";
+import { getLabel } from "../../helpers/label.helper";
+import { ICastlingBox } from "../../interfaces/castling.interface";
 import { IPiece } from "../../interfaces/piece.interface";
 import { IPosition } from "../../interfaces/position.interface";
 import { RootState } from "../../store";
@@ -8,7 +10,7 @@ import { gameActions } from "../../store/game.slice";
 import { pieceActions } from "../../store/piece.slice";
 import { positionActions } from "../../store/position.slice";
 import { Piece } from "../piece/piece";
-import { BoxStyled, CanKillDiv, CanVisitDiv, HiddenLabel } from "./box_styled";
+import { BoxStyled, CanCastleDiv, CanKillDiv, CanVisitDiv, HiddenLabel } from "./box_styled";
 
 export interface IBoxProps {
     position: IPosition;
@@ -17,6 +19,8 @@ export interface IBoxProps {
     active: boolean;
     canKill: boolean;
     canVisit: boolean;
+    canCastle: boolean;
+    castlingData?: ICastlingBox
 }
 
 function Box(props: IBoxProps) {
@@ -24,14 +28,19 @@ function Box(props: IBoxProps) {
     const activePiece = useSelector((state: RootState) => state.position.activePiece);
     const handleClick = () => {
         if(!activePiece) return;
-        if (props.canVisit || props.canKill) {
-            dispatch(positionActions.moveToVisitingBox(props.position));
-            dispatch(pieceActions.changePosition({
-                position: props.position, piece: activePiece
-            }));
-            dispatch(gameActions.nextMove());   
+        if (props.canCastle && props.castlingData) {
+            const { king, rook, kingNextPosition, rookNextPosition} = props.castlingData;
+            // Use above data to do castling(move pieces)
         } else {
-            dispatch(positionActions.makePieceInActive())
+            if (props.canVisit || props.canKill) {
+                dispatch(positionActions.moveToVisitingBox(props.position));
+                dispatch(pieceActions.changePosition({
+                    position: props.position, piece: activePiece
+                }));
+                dispatch(gameActions.nextMove());   
+            } else {
+                dispatch(positionActions.makePieceInActive())
+            }
         }
     }
     let boxColor = ((props.position.x + props.position.y) % 2) === 0 ? allColorType.DARK_COLOR : allColorType.LIGHT_COLOR;
@@ -42,6 +51,7 @@ function Box(props: IBoxProps) {
             { props.piece ? <Piece {...props.piece} /> : null}
             {props.canVisit ? <CanVisitDiv /> : null}
             {props.canKill ? <CanKillDiv /> : null}
+            {props.canCastle ? <CanCastleDiv /> : null}
         </BoxStyled>
     )
 }

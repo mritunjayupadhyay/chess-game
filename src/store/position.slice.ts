@@ -4,26 +4,34 @@ import { IPiece } from './../interfaces/piece.interface';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IBoxPosition, IPosition } from '../interfaces/position.interface';
 import { getPossibleMove, IGetAllPossibleMove } from '../logic';
-
+import { ICastlingBox } from '../interfaces/castling.interface';
+import { getCastlingBox } from '../logic/castling.logic';
+export interface IGetCastingPayloadProps {
+    piece: IPiece,
+    rooks: IPosition[]
+}
 interface IInitialState {
     activePiece: IPiece | undefined;
     allPositions: Record<string, IBoxPosition>;
     allPossibleVisitingBoxes: Record<string, IBoxPosition>;
     allPossibleKillBoxes: Record<string, IBoxPosition>;
+    castlingBoxes: Record<string, ICastlingBox>
 }
 
 const initialState:IInitialState = {
     activePiece: undefined,
     allPositions: allBoxAsObj,
     allPossibleVisitingBoxes: {},
-    allPossibleKillBoxes: {}
+    allPossibleKillBoxes: {},
+    castlingBoxes: {}
 }
 
 function createReducers() {
     return {
         moveToVisitingBox,
         makePieceInActive,
-        makePieceActive
+        makePieceActive,
+        getKingCastlingAndDangerBoxes
     };
 
     function moveToVisitingBox(state: IInitialState, action: PayloadAction<IPosition>) {
@@ -37,6 +45,7 @@ function createReducers() {
             state.activePiece = undefined;
             state.allPossibleKillBoxes = {};
             state.allPossibleVisitingBoxes = {};
+            state.castlingBoxes = {}
         }
         
     }
@@ -44,6 +53,7 @@ function createReducers() {
         state.activePiece = undefined;
         state.allPossibleKillBoxes = {};
         state.allPossibleVisitingBoxes = {};
+        state.castlingBoxes = {}
     }
     function makePieceActive(state: IInitialState, action: PayloadAction<IPiece>) {
         const allBoxesCloned = {...state.allPositions};
@@ -52,10 +62,24 @@ function createReducers() {
             piece: action.payload
         }
         const { allPossibleKillBoxes, allPossibleVisitingBoxes } = getPossibleMove(getPossibleMoveArgs);
-        // state = {...state, activePiece: action.payload, allPossibleKillBoxes, allPossibleVisitingBoxes};
         state.activePiece = action.payload;
         state.allPossibleKillBoxes = allPossibleKillBoxes;
         state.allPossibleVisitingBoxes = allPossibleVisitingBoxes;
+    }
+    function getKingCastlingAndDangerBoxes(state: IInitialState, action: PayloadAction<IGetCastingPayloadProps>) {
+        const { piece, rooks } = action.payload;
+        const allBoxesCloned = {...state.allPositions};
+        const getPossibleMoveArgs: IGetAllPossibleMove = {
+            allBoxes: allBoxesCloned,
+            piece
+        }
+        for (let i = 0; i < rooks.length; i++) {
+            const rookPosition = rooks[i];
+            const { label, value} = getCastlingBox(getPossibleMoveArgs, rookPosition);
+            if (value !== undefined) {
+                state.castlingBoxes[label] = value;
+            }
+        }
     }
 }
 

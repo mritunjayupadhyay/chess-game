@@ -11,6 +11,7 @@ function ChessBoard() {
     const activePiece = useSelector((state: RootState) => state.position.activePiece);
     const visitingPieces = useSelector((state: RootState) => state.position.allPossibleVisitingBoxes);
     const killPieces = useSelector((state: RootState) => state.position.allPossibleKillBoxes);
+    const castlingBoxes = useSelector((state: RootState) => state.position.castlingBoxes);
     // Render Boxes with store Data
     const renderBoxes = () => {
         const boxesToRender = [];
@@ -19,6 +20,7 @@ function ChessBoard() {
             let canKill = false;
             let canVisit = false;
             let active = false;
+            let canCastle = false;
             if ((item.position.x === activePiece?.position.x)
             && (item.position.y === activePiece?.position.y)) {
                 active = true;
@@ -30,6 +32,9 @@ function ChessBoard() {
                 canVisit = false;
                 canKill = true;
             }
+            if (castlingBoxes[boxKey]) {
+                canCastle = true;
+            }
             boxesToRender.push(
                 <Box
                 key={boxKey}
@@ -39,6 +44,7 @@ function ChessBoard() {
                 active={active}
                 canKill={canKill}
                 canVisit={canVisit}
+                canCastle={canCastle}
             />
             )
         }

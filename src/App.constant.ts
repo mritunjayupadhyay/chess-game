@@ -2,7 +2,7 @@ import { IPosition } from './interfaces/position.interface';
 export const HorizontalKeys = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 export const VerticalKeys = ['1', '2', '3', '4', '5', '6', '7', '8'];
 export type colorType = 'light' | 'dark';
-
+export const kingMovementInCastling = 2;
 export enum pieceType {
     PAWN = "PAWN",
     KNIGHT = "KNIGHT",
