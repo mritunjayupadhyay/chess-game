@@ -1,20 +1,64 @@
+import { allColorType } from './../App.constant';
 import { IPiece } from './../interfaces/piece.interface';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { pieceData } from './initialData/piece.data';
 import { IPositionAndPiece } from '../interfaces';
+import { colorType } from '../App.constant';
+import { ICastlingData } from '../interfaces/castling.interface';
 
 interface IInitialState {
     activeColor: string;
     winner: string | undefined;
     draw: boolean;
-    pieces: IPiece[]
+    pieces: IPiece[],
+    castlingData: Record<colorType, ICastlingData>
+}
+
+const castlingData: Record<colorType, ICastlingData> = {
+   [allColorType.LIGHT_COLOR]: {
+    isDone: false,
+    isKingMoved: false,
+    rook: [
+        {
+            isMoved: false,
+            position: {
+                x: 0, y: 0
+            }
+        },
+        {
+            isMoved: false,
+            position: {
+                x: 7, y: 0
+            }
+        }
+    ]
+   },
+   [allColorType.DARK_COLOR]: {
+    isDone: false,
+    isKingMoved: false,
+    rook: [
+        {
+            isMoved: false,
+            position: {
+                x: 0, y: 7
+            }
+        },
+        {
+            isMoved: false,
+            position: {
+                x: 7, y: 7
+            }
+        }
+    ]
+   }
 }
 
 const initialState:IInitialState = {
     activeColor: 'light',
     winner: undefined,
     draw: false,
-    pieces: pieceData
+    pieces: pieceData,
+    castlingData: castlingData
 }
 
 function createReducers() {
