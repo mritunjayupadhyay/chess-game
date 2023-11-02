@@ -16,8 +16,8 @@ export const getCastlingBox = (getPossibleMoveArgs: IGetAllPossibleMove, rookPos
     // Rook and king will be in a horizontal line;
     const yIndex = piece.position.y;
     const isLeftRook: boolean = piece.position.x > rookPosition.x;
-    let startIndex = isLeftRook ? rookPosition.x : piece.position.x;
-    let lastIndex = isLeftRook ? piece.position.x : rookPosition.x;
+    const startIndex = isLeftRook ? rookPosition.x : piece.position.x;
+    const lastIndex = isLeftRook ? piece.position.x : rookPosition.x;
     // Check if there is any piece between rook and king. If yes then return undefined.
     for (let i = startIndex + 1; i < lastIndex; i++) {
         const label = getLabel(i, yIndex);

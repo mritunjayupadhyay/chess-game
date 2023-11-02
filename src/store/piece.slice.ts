@@ -1,4 +1,4 @@
-import { allColorType } from './../App.constant';
+import { allColorType, pieceType } from './../App.constant';
 import { IPiece } from './../interfaces/piece.interface';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { pieceData } from './initialData/piece.data';
@@ -80,6 +80,26 @@ function createReducers() {
             }
             return item;
         });
+        const castlingData = state.castlingData[piece.color]
+        if (!(castlingData.isDone || castlingData.isKingMoved)) {
+             // Check if rook has been moved
+            if (piece.type === pieceType.ROOK) {
+                const rook = castlingData.rook.map((item) => {
+                    if (item.position.x === piece.position.x && item.position.y === piece.position.y) {
+                        return {...item, isMoved: true }
+                    }
+                    return item
+                })
+                const isDone = rook.filter((item) => item.isMoved === false).length === 0;
+                state.castlingData[piece.color].isDone = isDone;
+                state.castlingData[piece.color].rook = rook;
+            }
+            // Check if King is moved.
+            if (piece.type === pieceType.KING) {
+                state.castlingData[piece.color].isKingMoved = true       
+            }
+        }
+       
         state.pieces = pieces;
     }
 }

@@ -3,7 +3,7 @@ import { HorizontalKeys, VerticalKeys } from "../../App.constant";
 import { IBoxPosition } from "../../interfaces/position.interface";
 import { pieceData } from "./piece.data";
 import { getLabel } from '../../helpers/label.helper';
-export const allBoxAsObj: Record<string, IBoxPosition> = {};
+const allBoxAsObj: Record<string, IBoxPosition> = {};
 
 // Add boxes to a Map
 for (let j = VerticalKeys.length - 1; j >= 0; j--) {
@@ -28,3 +28,5 @@ for (let k = 0; k < pieceData.length; k++) {
         allBoxAsObj[label] = newBoxPosition;
     }
 }
+
+export { allBoxAsObj }
