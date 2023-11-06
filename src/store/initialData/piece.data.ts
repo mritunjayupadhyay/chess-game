@@ -1,7 +1,6 @@
 import { pieceType, allColorType, piecePoint } from '../../App.constant';
 import { IPiece } from './../../interfaces/piece.interface';
-export const pieceData: IPiece[] = [];
-
+const pieceData: IPiece[] = [];
 // Add King
 pieceData.push({
     position: {x: 4, y: 0},
@@ -145,4 +144,8 @@ for (let i = 0; i < 8; i++) {
         color: allColorType.DARK_COLOR,
         points: piecePoint.PAWN
     })
+}
+
+export {
+    pieceData
 }

@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { allColorType } from "../App.constant";
 
 interface IInitialState {
-    activePlayer: string;
+    activeColor: string;
     winner: string | undefined;
     draw: boolean;
 }
 
 const initialState:IInitialState = {
-    activePlayer: 'light',
+    activeColor: allColorType.LIGHT_COLOR,
     winner: undefined,
     draw: false
 }
@@ -18,7 +19,7 @@ function createReducers() {
     };
 
     function nextMove(state: IInitialState) {
-        state.activePlayer = 'dark';
+        state.activeColor = state.activeColor === allColorType.LIGHT_COLOR ? allColorType.DARK_COLOR : allColorType.LIGHT_COLOR;
     }
 }
 

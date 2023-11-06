@@ -5,8 +5,13 @@ export const GameStyle = styled.div`
     flex-direction: column;
     width: 100%;
     min-height: 100vh;
+    justify-content: center;
 `;
 
 export const ChessBoardContainer = styled.div`
-   padding: 20px 0;
+   position: relative;
+   width: 100%;
+   max-width: 600px;
+   overflow: hidden;
+   margin: 0px auto;
 `

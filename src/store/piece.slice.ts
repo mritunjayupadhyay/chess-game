@@ -1,28 +1,57 @@
 import { IPiece } from './../interfaces/piece.interface';
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { pieceData } from './initialData/piece.data';
+import { colorType } from '../App.constant';
+import { ICastlingData } from '../interfaces/castling.interface';
+import { IBoxPosition, IPosition } from '../interfaces/position.interface';
+import { castlingData, getUpdatedCastlingData } from '../logic/castling.logic';
+import { getCheckAndCheckmate, getUpdatePiecesAfterMovement } from '../helpers/piece.helper';
 
 interface IInitialState {
-    activePlayer: string;
-    winner: string | undefined;
-    draw: boolean;
-    pieces: IPiece[]
+    activeColor: string;
+    check: colorType | undefined;
+    checkmate: colorType | undefined;
+    pieces: IPiece[],
+    castlingData: Record<colorType, ICastlingData>
+}
+
+interface IChangePositionProps {
+    allPositions: Record<string, IBoxPosition>,
+    position: IPosition
+    piece: IPiece
 }
 
 const initialState:IInitialState = {
-    activePlayer: 'light',
-    winner: undefined,
-    draw: false,
-    pieces: pieceData
+    activeColor: 'light',
+    check: undefined,
+    checkmate: undefined,
+    pieces: pieceData,
+    castlingData: castlingData
 }
 
 function createReducers() {
     return {
-        nextMove
+        changePosition,
     };
 
-    function nextMove(state: IInitialState) {
-        state.activePlayer = 'dark';
+    function changePosition(state: IInitialState, action: PayloadAction<IChangePositionProps>) {
+        // const newPosition = {...action.payload.position};
+        const {piece, allPositions, position: newPosition} = action.payload;
+        const stateCopy = {...state};
+
+        // Get updated Pieces after movement
+        const pieces = getUpdatePiecesAfterMovement(stateCopy.pieces, piece, newPosition)
+
+        // Get updated castling Data
+        const newCastlingData = getUpdatedCastlingData(stateCopy.castlingData[piece.color], piece)
+
+        // Get Check and checkmate
+        const { check, checkmate } = getCheckAndCheckmate(pieces, allPositions, piece, newPosition, piece.color)
+       
+        state.pieces = pieces;
+        state.castlingData[piece.color] = newCastlingData
+        state.check = check;
+        state.checkmate = checkmate
     }
 }
 
