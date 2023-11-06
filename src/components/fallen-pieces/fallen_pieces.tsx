@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { pieceType } from "../../App.constant";
 import { IColor } from "../../interfaces/color.interface";
 import { RootState } from "../../store";
-import { getImageUrl } from "../piece/piece.helper";
+import { getImageUrl } from "../../helpers/piece.helper";
 import { EachPiece, FallenPieceStyled, NameAndPiecesContainer, NameContainer, NumberContainer, PieceListContainer, ProfilePic, ProfilePicContainer } from "./fallen_pieces.styled";
 
 function FallenPieces(props: IColor) {
@@ -13,10 +13,10 @@ function FallenPieces(props: IColor) {
     const opponentPoint = opponentPieces.reduce((sum, item) => sum + item.points, 0)
     const point = opponentPoint - ourPoint;
     const renderAllPieces = () => {
-        return opponentPieces.map((item) => {
+        return opponentPieces.map((item, i) => {
             const pieceUrl = getImageUrl(item.type, item.color);
             return (
-                <EachPiece src={pieceUrl}/>
+                <EachPiece key={`${item.type}${item.points}${item.color}${i}`} src={pieceUrl}/>
             );
         })
     }

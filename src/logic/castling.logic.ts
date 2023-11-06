@@ -2,9 +2,77 @@ import { getLabel } from './../helpers/label.helper';
 import { IGetAllPossibleMove } from '.';
 import { ICastlingBox } from '../interfaces/castling.interface';
 import { IPosition } from './../interfaces/position.interface';
-import { kingMovementInCastling } from '../App.constant';
+import { kingMovementInCastling, pieceType } from '../App.constant';
+import { allColorType, colorType } from "../App.constant";
+import { ICastlingData } from "../interfaces/castling.interface";
+import { IPiece } from '../interfaces/piece.interface';
+
+
+
+export const castlingData: Record<colorType, ICastlingData> = {
+    [allColorType.LIGHT_COLOR]: {
+     isDone: false,
+     isKingMoved: false,
+     rook: [
+         {
+             isMoved: false,
+             position: {
+                 x: 0, y: 0
+             }
+         },
+         {
+             isMoved: false,
+             position: {
+                 x: 7, y: 0
+             }
+         }
+     ]
+    },
+    [allColorType.DARK_COLOR]: {
+     isDone: false,
+     isKingMoved: false,
+     rook: [
+         {
+             isMoved: false,
+             position: {
+                 x: 0, y: 7
+             }
+         },
+         {
+             isMoved: false,
+             position: {
+                 x: 7, y: 7
+             }
+         }
+     ]
+    }
+ }
+
+export const getUpdatedCastlingData = (castlingDataForOnePlayer: ICastlingData, piece: IPiece): ICastlingData => {
+     // Castling : newCastlingData
+     let newCastlingData = {...castlingDataForOnePlayer };
+     if (!(castlingDataForOnePlayer.isDone || castlingDataForOnePlayer.isKingMoved)) {
+          // Check if rook has been moved
+         if (piece.type === pieceType.ROOK) {
+             const rook = castlingDataForOnePlayer.rook.map((item) => {
+                 if (item.position.x === piece.position.x && item.position.y === piece.position.y) {
+                     return {...item, isMoved: true }
+                 }
+                 return item
+             })
+             const isDone = rook.filter((item) => item.isMoved === false).length === 0;
+             newCastlingData.isDone = isDone;
+             newCastlingData.rook = rook;
+         }
+         // Check if King is moved.
+         if (piece.type === pieceType.KING) {
+             newCastlingData.isKingMoved = true       
+         }
+    }
+    return newCastlingData;
+}
+
 export const getCastlingBox = (getPossibleMoveArgs: IGetAllPossibleMove, rookPosition: IPosition): { label: string, value: ICastlingBox | undefined} => {
-    var label = '';
     var value: ICastlingBox | undefined = undefined;
 
     // Get data of arguments (all boxes and the specific piece)

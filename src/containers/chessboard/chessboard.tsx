@@ -25,15 +25,15 @@ function ChessBoard() {
             && (item.position.y === activePiece?.position.y)) {
                 active = true;
             }
-            if (visitingPieces[boxKey]) {
+            if (visitingPieces[boxKey] || castlingBoxes[boxKey]) {
                 canVisit = true;
+            }
+            if (castlingBoxes[boxKey]) {
+                canCastle = true;
             }
             if (killPieces[boxKey]) {
                 canVisit = false;
                 canKill = true;
-            }
-            if (castlingBoxes[boxKey]) {
-                canCastle = true;
             }
             boxesToRender.push(
                 <Box

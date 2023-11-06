@@ -1,106 +1,57 @@
-import { allColorType, pieceType } from './../App.constant';
 import { IPiece } from './../interfaces/piece.interface';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { pieceData } from './initialData/piece.data';
-import { IPositionAndPiece } from '../interfaces';
 import { colorType } from '../App.constant';
 import { ICastlingData } from '../interfaces/castling.interface';
+import { IBoxPosition, IPosition } from '../interfaces/position.interface';
+import { castlingData, getUpdatedCastlingData } from '../logic/castling.logic';
+import { getCheckAndCheckmate, getUpdatePiecesAfterMovement } from '../helpers/piece.helper';
 
 interface IInitialState {
     activeColor: string;
-    winner: string | undefined;
-    draw: boolean;
+    check: colorType | undefined;
+    checkmate: colorType | undefined;
     pieces: IPiece[],
     castlingData: Record<colorType, ICastlingData>
 }
 
-const castlingData: Record<colorType, ICastlingData> = {
-   [allColorType.LIGHT_COLOR]: {
-    isDone: false,
-    isKingMoved: false,
-    rook: [
-        {
-            isMoved: false,
-            position: {
-                x: 0, y: 0
-            }
-        },
-        {
-            isMoved: false,
-            position: {
-                x: 7, y: 0
-            }
-        }
-    ]
-   },
-   [allColorType.DARK_COLOR]: {
-    isDone: false,
-    isKingMoved: false,
-    rook: [
-        {
-            isMoved: false,
-            position: {
-                x: 0, y: 7
-            }
-        },
-        {
-            isMoved: false,
-            position: {
-                x: 7, y: 7
-            }
-        }
-    ]
-   }
+interface IChangePositionProps {
+    allPositions: Record<string, IBoxPosition>,
+    position: IPosition
+    piece: IPiece
 }
 
 const initialState:IInitialState = {
     activeColor: 'light',
-    winner: undefined,
-    draw: false,
+    check: undefined,
+    checkmate: undefined,
     pieces: pieceData,
     castlingData: castlingData
 }
 
 function createReducers() {
     return {
-        changePosition
+        changePosition,
     };
 
-    function changePosition(state: IInitialState, action: PayloadAction<IPositionAndPiece>) {
-        const newPosition = {...action.payload.position};
-        const piece = action.payload.piece;
-        const pieces = state.pieces.map((item) => {
-            if (item.position.x === piece.position.x 
-            && item.position.y === piece.position.y) {
-                return {...piece, position: newPosition };
-            }
-            // If it is a kill
-            if (item.position.x === newPosition.x && item.position.y === newPosition.y) {
-                return {...item, isAlive: false, position: {x: -1, y: -1}}
-            }
-            return item;
-        });
-        const castlingData = state.castlingData[piece.color]
-        if (!(castlingData.isDone || castlingData.isKingMoved)) {
-             // Check if rook has been moved
-            if (piece.type === pieceType.ROOK) {
-                const rook = castlingData.rook.map((item) => {
-                    if (item.position.x === piece.position.x && item.position.y === piece.position.y) {
-                        return {...item, isMoved: true }
-                    }
-                    return item
-                })
-                const isDone = rook.filter((item) => item.isMoved === false).length === 0;
-                state.castlingData[piece.color].isDone = isDone;
-                state.castlingData[piece.color].rook = rook;
-            }
-            // Check if King is moved.
-            if (piece.type === pieceType.KING) {
-                state.castlingData[piece.color].isKingMoved = true       
-            }
-        }
+    function changePosition(state: IInitialState, action: PayloadAction<IChangePositionProps>) {
+        // const newPosition = {...action.payload.position};
+        const {piece, allPositions, position: newPosition} = action.payload;
+        const stateCopy = {...state};
+
+        // Get updated Pieces after movement
+        const pieces = getUpdatePiecesAfterMovement(stateCopy.pieces, piece, newPosition)
+
+        // Get updated castling Data
+        const newCastlingData = getUpdatedCastlingData(stateCopy.castlingData[piece.color], piece)
+
+        // Get Check and checkmate
+        const { check, checkmate } = getCheckAndCheckmate(pieces, allPositions, piece, newPosition, piece.color)
        
         state.pieces = pieces;
+        state.castlingData[piece.color] = newCastlingData
+        state.check = check;
+        state.checkmate = checkmate
     }
 }
 

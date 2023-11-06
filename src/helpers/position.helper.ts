@@ -1,4 +1,7 @@
 import { HorizontalKeys, VerticalKeys } from "../App.constant";
+import { IPiece } from "../interfaces/piece.interface";
+import { IBoxPosition, IPosition } from "../interfaces/position.interface";
+import { getLabel } from "./label.helper";
 
 export const checkIfOutside = (x: number, y: number): boolean => {
     if ((x > HorizontalKeys.length - 1) 
@@ -8,4 +11,14 @@ export const checkIfOutside = (x: number, y: number): boolean => {
         return true;
     }
     return false;
+}
+
+export const getUpdatedPositionAfterMove = (allPositions: Record<string, IBoxPosition>, movedPiece: IPiece, newPosition: IPosition):Record<string, IBoxPosition>  => {
+    const allPositionsAfterMove = {...allPositions}
+    const label = getLabel(newPosition.x, newPosition.y);
+    const activePieceWithNewPosition  = {...movedPiece, position: newPosition};
+    const activePieceExistingLabel = getLabel(movedPiece.position.x, movedPiece.position.y);
+    allPositionsAfterMove[label] = {...allPositionsAfterMove[label], piece: activePieceWithNewPosition};
+    allPositionsAfterMove[activePieceExistingLabel] = {...allPositionsAfterMove[activePieceExistingLabel], piece: undefined};
+    return allPositionsAfterMove;
 }

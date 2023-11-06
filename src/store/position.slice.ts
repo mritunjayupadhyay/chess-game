@@ -32,7 +32,7 @@ function createReducers() {
         moveToVisitingBox,
         makePieceInActive,
         makePieceActive,
-        getKingCastlingAndDangerBoxes
+        getKingCastlingBoxes
     };
 
     function moveInCastling(state: IInitialState, action: PayloadAction<ICastlingBox>) {
@@ -87,7 +87,7 @@ function createReducers() {
         state.allPossibleKillBoxes = allPossibleKillBoxes;
         state.allPossibleVisitingBoxes = allPossibleVisitingBoxes;
     }
-    function getKingCastlingAndDangerBoxes(state: IInitialState, action: PayloadAction<IGetCastingPayloadProps>) {
+    function getKingCastlingBoxes(state: IInitialState, action: PayloadAction<IGetCastingPayloadProps>) {
         const { piece, rooks } = action.payload;
         const allBoxesCloned = {...state.allPositions};
         const getPossibleMoveArgs: IGetAllPossibleMove = {

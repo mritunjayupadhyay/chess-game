@@ -58,7 +58,6 @@ const getPossibleMove = (getPossibleMoveArgs: IGetAllPossibleMove)
             visitingBox,
             killingBox
         } = getVisitingAndKillingBoxes(i, j, getPossibleMoveArgs.piece.color, getPossibleMoveArgs.allBoxes);
-        console.log("first bishop direction", i, j, visitingBox, killingBox, shouldBreak, label)
         if (visitingBox !== undefined) {
             allPossibleVisitingBoxes[label] = visitingBox;
         }

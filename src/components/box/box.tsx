@@ -10,7 +10,7 @@ import { gameActions } from "../../store/game.slice";
 import { pieceActions } from "../../store/piece.slice";
 import { positionActions } from "../../store/position.slice";
 import { Piece } from "../piece/piece";
-import { BoxStyled, CanCastleDiv, CanKillDiv, CanVisitDiv, HiddenLabel } from "./box_styled";
+import { BoxStyled, CanKillDiv, CanVisitDiv, HiddenLabel } from "./box_styled";
 
 export interface IBoxProps {
     position: IPosition;
@@ -26,12 +26,12 @@ export interface IBoxProps {
 function Box(props: IBoxProps) {
     const dispatch = useDispatch();
     const activePiece = useSelector((state: RootState) => state.position.activePiece);
+    const allPositions = useSelector((state: RootState) => state.position.allPositions);
     const handleClick = () => {
         if (!activePiece) return;
         if (props.canCastle && props.castlingData) {
             const { king, rook, kingNextPosition, rookNextPosition } = props.castlingData;
             // Use above data to do castling(move pieces)
-            console.log("castling data", king, rook, kingNextPosition, rookNextPosition);
             const castlingProps: ICastlingBox = {
                 king,
                 rook,
@@ -42,10 +42,12 @@ function Box(props: IBoxProps) {
             if (king.piece !== undefined && rook.piece !== undefined) {
                 dispatch(positionActions.moveInCastling(castlingProps));
                 dispatch(pieceActions.changePosition({
-                    position: kingNextPosition, piece: king.piece
+                    position: kingNextPosition, 
+                    piece: king.piece,
+                    allPositions
                 }));
                 dispatch(pieceActions.changePosition({
-                    position: rookNextPosition, piece: rook.piece
+                    position: rookNextPosition, piece: rook.piece, allPositions
                 }));
             }
             dispatch(gameActions.nextMove());
@@ -53,7 +55,7 @@ function Box(props: IBoxProps) {
             if (props.canVisit || props.canKill) {
                 dispatch(positionActions.moveToVisitingBox(props.position));
                 dispatch(pieceActions.changePosition({
-                    position: props.position, piece: activePiece
+                    position: props.position, piece: activePiece, allPositions
                 }));
                 dispatch(gameActions.nextMove());
             } else {
@@ -69,7 +71,6 @@ function Box(props: IBoxProps) {
             {props.piece ? <Piece {...props.piece} /> : null}
             {props.canVisit ? <CanVisitDiv /> : null}
             {props.canKill ? <CanKillDiv /> : null}
-            {props.canCastle ? <CanCastleDiv /> : null}
         </BoxStyled>
     )
 }

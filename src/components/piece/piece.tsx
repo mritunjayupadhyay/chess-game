@@ -5,7 +5,7 @@ import { pieceType } from '../../App.constant';
 import { IPiece } from '../../interfaces/piece.interface';
 import { RootState } from '../../store';
 import { IGetCastingPayloadProps, positionActions } from '../../store/position.slice';
-import { getImageUrl } from './piece.helper';
+import { getImageUrl } from '../../helpers/piece.helper';
 import { PieceStyled } from './piece_styled';
 
 export interface IPieceImage {
@@ -31,7 +31,7 @@ function Piece(props: IPiece) {
         piece: props,
         rooks: castlingData.rook.filter((item) => !item.isMoved).map((item) => item.position)
       }
-      dispatch(positionActions.getKingCastlingAndDangerBoxes(castingPayloadProps));
+      dispatch(positionActions.getKingCastlingBoxes(castingPayloadProps));
     }
   }
     const url = getImageUrl(props.type, props.color)
