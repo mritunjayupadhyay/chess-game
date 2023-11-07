@@ -3,12 +3,16 @@ import styled from 'styled-components';
 export interface IBoxStyledProp {
   color: colorType,
   active: boolean,
-  clickable: boolean
+  clickable: boolean,
+  isChecked: boolean
 }
 export const BoxStyled = styled("div") <IBoxStyledProp>`
   position: relative;
   cursor: ${props => props.clickable ? "pointer" : "default"};
   background-color: ${props => {
+    if (props.isChecked) {
+      return 'rgba(255, 0, 0, 0.9)'
+    }
     if (props.active) {
       return 'rgba(255, 255, 0, 0.5)'
     }

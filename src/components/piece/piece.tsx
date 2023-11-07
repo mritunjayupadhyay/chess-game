@@ -18,13 +18,15 @@ function Piece(props: IPiece) {
   const dispatch = useDispatch();
   const activeColor = useSelector((state: RootState) => state.game.activeColor);
   const castlingData = useSelector((state: RootState) => state.piece.castlingData[props.color])
+  const pieces = useSelector((state: RootState) => state.piece.pieces);
+
 
   const handleClick = () => {
     if (activeColor !== props.color) {
       alert(`${activeColor} turn to play`);
       return;
     }
-    dispatch(positionActions.makePieceActive(props));
+    dispatch(positionActions.makePieceActive({ piece: props, pieces }));
     if (props.type === pieceType.KING && (!castlingData.isDone && !castlingData.isKingMoved)) {
       // Check if we can castle or not :TODO
       const castingPayloadProps: IGetCastingPayloadProps = {

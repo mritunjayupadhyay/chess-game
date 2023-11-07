@@ -20,6 +20,7 @@ export interface IBoxProps {
     canKill: boolean;
     canVisit: boolean;
     canCastle: boolean;
+    isChecked: Boolean
     castlingData?: ICastlingBox
 }
 
@@ -55,7 +56,7 @@ function Box(props: IBoxProps) {
             if (props.canVisit || props.canKill) {
                 dispatch(positionActions.moveToVisitingBox(props.position));
                 dispatch(pieceActions.changePosition({
-                    position: props.position, piece: activePiece, allPositions
+                    position: props.position, piece: activePiece, allPositions,
                 }));
                 dispatch(gameActions.nextMove());
             } else {
@@ -66,7 +67,7 @@ function Box(props: IBoxProps) {
     let boxColor = ((props.position.x + props.position.y) % 2) === 0 ? allColorType.DARK_COLOR : allColorType.LIGHT_COLOR;
     let clickable = !!props.piece || props.canVisit || props.canKill;
     return (
-        <BoxStyled onClick={() => handleClick()} clickable={clickable} color={boxColor} active={props.active}>
+        <BoxStyled onClick={() => handleClick()} isChecked={!!props.isChecked} clickable={clickable} color={boxColor} active={props.active}>
             <HiddenLabel>{props.label}</HiddenLabel>
             {props.piece ? <Piece {...props.piece} /> : null}
             {props.canVisit ? <CanVisitDiv /> : null}

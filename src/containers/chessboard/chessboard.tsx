@@ -3,6 +3,7 @@ import { Box } from "../../components/box/box";
 import { RootState } from "../../store";
 import './chessboard.scss';
 import { ChessBoardContent, ChessBoardStyled } from "./chessboard_styled";
+import { pieceType } from "../../App.constant";
 
 function ChessBoard() {
 
@@ -12,6 +13,7 @@ function ChessBoard() {
     const visitingPieces = useSelector((state: RootState) => state.position.allPossibleVisitingBoxes);
     const killPieces = useSelector((state: RootState) => state.position.allPossibleKillBoxes);
     const castlingBoxes = useSelector((state: RootState) => state.position.castlingBoxes);
+    const checked = useSelector((state: RootState) => state.piece.check);
     // Render Boxes with store Data
     const renderBoxes = () => {
         const boxesToRender = [];
@@ -21,6 +23,7 @@ function ChessBoard() {
             let canVisit = false;
             let active = false;
             let canCastle = false;
+            let isChecked = false
             if ((item.position.x === activePiece?.position.x)
             && (item.position.y === activePiece?.position.y)) {
                 active = true;
@@ -35,6 +38,9 @@ function ChessBoard() {
                 canVisit = false;
                 canKill = true;
             }
+            if (checked === item.piece?.color && item.piece?.type === pieceType.KING) {
+                isChecked = true;
+            }
             boxesToRender.push(
                 <Box
                 key={boxKey}
@@ -45,6 +51,7 @@ function ChessBoard() {
                 canKill={canKill}
                 canVisit={canVisit}
                 canCastle={canCastle}
+                isChecked={isChecked}
                 castlingData={castlingBoxes[boxKey]}
             />
             )

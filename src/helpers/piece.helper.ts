@@ -3,6 +3,7 @@ import { allColorType, colorType, pieceType } from '../App.constant';
 import { IPiece } from '../interfaces/piece.interface';
 import { IBoxPosition, IPosition } from '../interfaces/position.interface';
 import { IGetAllPossibleMove, getPossibleMove, isInDanger } from '../logic';
+import { getOppositeColor } from './color.helper';
 import { getUpdatedPositionAfterMove } from './position.helper';
 
 export const getImageUrl = (type: pieceType, color: colorType): string => {
@@ -74,19 +75,28 @@ export const getUpdatePiecesAfterMovement = (pieces: IPiece[], movedPiece: IPiec
 });
 }
 
+const getKingAndPiecesToKill = (pieces: IPiece[], color: colorType)
+: { king: IPiece, piecesToKill: IPiece[]} => {
+  const king = pieces.find((item) => item.color === color && item.type === pieceType.KING) as IPiece;
+  const piecesToKill = pieces.filter((item) => item.color !== king.color && item.isAlive);
+  return { king, piecesToKill};
+}
+
+
+export const checkKingInDanger = (pieces: IPiece[], allPositions: Record<string, IBoxPosition>, color: colorType): Boolean => {
+  const { king, piecesToKill } = getKingAndPiecesToKill(pieces, color)
+  return isInDanger(piecesToKill, allPositions, king.position);
+}
+
 export const getCheckAndCheckmate = (pieces: IPiece[], allPositions: Record<string, IBoxPosition>, movedPiece: IPiece, newPosition: IPosition, color: colorType )
 : {check: colorType | undefined, checkmate: colorType | undefined} => {
   // check if there is check or checkmate
-  const king = pieces.find((item) => item.color !== color && item.type === pieceType.KING);
   let check: undefined | colorType = undefined;
   let checkmate: undefined | colorType = undefined;
-  if (king === undefined) {
-      alert('Game Error');
-      return { check, checkmate };
-  }
-  const piecesToKill = pieces.filter((item) => item.color === color && item.isAlive);
+  const { king, piecesToKill } = getKingAndPiecesToKill(pieces, getOppositeColor(color))
+
   if (isInDanger(piecesToKill, allPositions, king.position)) {
-      check = king.color;
+      check = getOppositeColor(color);
       const allPositionsAfterMove = getUpdatedPositionAfterMove(allPositions, movedPiece, newPosition)
 
       const getPossibleMoveArgs: IGetAllPossibleMove = {
@@ -94,7 +104,7 @@ export const getCheckAndCheckmate = (pieces: IPiece[], allPositions: Record<stri
           piece: king
       }
       const { allPossibleKillBoxes, allPossibleVisitingBoxes } = getPossibleMove(getPossibleMoveArgs);
-      checkmate = king.color;
+      checkmate = getOppositeColor(color);
       for (const move of Object.values({...allPossibleKillBoxes, ...allPossibleVisitingBoxes})) {
 
           if(!isInDanger(piecesToKill, allPositions, move.position)) {

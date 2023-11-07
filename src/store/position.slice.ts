@@ -6,9 +6,14 @@ import { IBoxPosition, IPosition } from '../interfaces/position.interface';
 import { getPossibleMove, IGetAllPossibleMove } from '../logic';
 import { ICastlingBox } from '../interfaces/castling.interface';
 import { getCastlingBox } from '../logic/castling.logic';
+import { filterInvalidBoxesToMove, IFilterInvalidBoxesToMove } from '../helpers/position.helper';
 export interface IGetCastingPayloadProps {
     piece: IPiece,
     rooks: IPosition[]
+}
+interface IMakePieceActiveProps {
+    piece: IPiece,
+    pieces: IPiece[],
 }
 interface IInitialState {
     activePiece: IPiece | undefined;
@@ -76,16 +81,24 @@ function createReducers() {
         state.allPossibleVisitingBoxes = {};
         state.castlingBoxes = {}
     }
-    function makePieceActive(state: IInitialState, action: PayloadAction<IPiece>) {
+    function makePieceActive(state: IInitialState, action: PayloadAction<IMakePieceActiveProps>) {
+        const { piece, pieces } = action.payload;
         const allBoxesCloned = {...state.allPositions};
         const getPossibleMoveArgs: IGetAllPossibleMove = {
             allBoxes: allBoxesCloned,
-            piece: action.payload
+            piece
         }
         const { allPossibleKillBoxes, allPossibleVisitingBoxes } = getPossibleMove(getPossibleMoveArgs);
-        state.activePiece = action.payload;
-        state.allPossibleKillBoxes = allPossibleKillBoxes;
-        state.allPossibleVisitingBoxes = allPossibleVisitingBoxes;
+        state.activePiece = piece;
+        const args:IFilterInvalidBoxesToMove = {
+            piece,
+            pieces,
+            allPositions: allBoxesCloned,
+            color: piece.color,
+            boxes: {}
+        }
+        state.allPossibleKillBoxes = filterInvalidBoxesToMove({...args, boxes: allPossibleKillBoxes});
+        state.allPossibleVisitingBoxes = filterInvalidBoxesToMove({...args, boxes: allPossibleVisitingBoxes});
     }
     function getKingCastlingBoxes(state: IInitialState, action: PayloadAction<IGetCastingPayloadProps>) {
         const { piece, rooks } = action.payload;
