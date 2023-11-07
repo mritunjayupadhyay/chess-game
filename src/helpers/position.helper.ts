@@ -36,19 +36,14 @@ export const filterInvalidBoxesToMove = (args: IFilterInvalidBoxesToMove): Recor
     const {
         piece, pieces, allPositions, color, boxes
     } = args;
-    console.log("the args we ahvae", args)
     const validBoxes: Record<string, IBoxPosition> = {}
     for (const [key, value] of Object.entries(boxes)) {
         const updatedPieces = getUpdatePiecesAfterMovement(pieces, piece, value.position)
-        console.log("updated pieces", JSON.parse(JSON.stringify(updatedPieces)));
         const allPositionsAfterMove = getUpdatedPositionAfterMove(allPositions, piece, value.position)
-        console.log("updated positions", JSON.parse(JSON.stringify(allPositionsAfterMove)));
 
-        console.log("checkKingSafty", checkKingInDanger(updatedPieces, allPositionsAfterMove, color))
         if (checkKingInDanger(updatedPieces, allPositionsAfterMove, color) === false) {
             validBoxes[key] = value;
         }
     }
-    console.log("valida box", validBoxes)
     return validBoxes;
 }
