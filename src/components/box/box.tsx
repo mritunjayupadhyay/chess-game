@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { allColorType } from "../../App.constant";
-import { getLabel } from "../../helpers/label.helper";
 import { ICastlingBox } from "../../interfaces/castling.interface";
 import { IPiece } from "../../interfaces/piece.interface";
 import { IPosition } from "../../interfaces/position.interface";

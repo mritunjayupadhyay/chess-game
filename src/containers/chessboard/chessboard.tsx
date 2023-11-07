@@ -3,7 +3,7 @@ import { Box } from "../../components/box/box";
 import { RootState } from "../../store";
 import './chessboard.scss';
 import { ChessBoardContent, ChessBoardStyled } from "./chessboard_styled";
-import { colorType, pieceType } from "../../App.constant";
+import { pieceType } from "../../App.constant";
 import { useEffect } from "react";
 import Swal from "sweetalert2";
 import { getOppositeColor } from "../../helpers/color.helper";
