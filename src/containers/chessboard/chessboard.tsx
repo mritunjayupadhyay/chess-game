@@ -3,7 +3,10 @@ import { Box } from "../../components/box/box";
 import { RootState } from "../../store";
 import './chessboard.scss';
 import { ChessBoardContent, ChessBoardStyled } from "./chessboard_styled";
-import { pieceType } from "../../App.constant";
+import { colorType, pieceType } from "../../App.constant";
+import { useEffect } from "react";
+import Swal from "sweetalert2";
+import { getOppositeColor } from "../../helpers/color.helper";
 
 function ChessBoard() {
 
@@ -14,6 +17,27 @@ function ChessBoard() {
     const killPieces = useSelector((state: RootState) => state.position.allPossibleKillBoxes);
     const castlingBoxes = useSelector((state: RootState) => state.position.castlingBoxes);
     const checked = useSelector((state: RootState) => state.piece.check);
+    const checkmate = useSelector((state: RootState) => state.piece.checkmate);
+
+    useEffect(()=>{
+        if (checkmate !== undefined){
+            const text = `${getOppositeColor(checkmate)} has own`
+           //Redirect the visitor to the login page
+           Swal.fire({
+            title: "Winner",
+            text: text,
+            icon: "success",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "New Game"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.reload();
+            }
+          });
+        }
+     
+     },[checkmate]);
+
     // Render Boxes with store Data
     const renderBoxes = () => {
         const boxesToRender = [];
