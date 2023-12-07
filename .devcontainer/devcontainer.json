@@ -21,26 +21,26 @@
 			"installOhMyZsh": true,
 			"installOhMyZshConfig": true,
 			"upgradePackages": true,
-			"username": "sayantan",
+			"username": "mritunjay",
 			"userUid": "automatic",
 			"userGid": "automatic"
 		},
 		"ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {
 			"plugins": "colored-man-pages colorize docker git npm nvm sudo ssh-agent zsh-autosuggestions zsh-interactive-cd zsh-syntax-highlighting ",
 			"omzPlugins": "https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-syntax-highlighting.git https://github.com/johannchangpro/zsh-interactive-cd.git",
-			"username": "sayantan"
+			"username": "mritunjay"
 		}
 	},
 	// mount local directory to container
 	"mounts": [
-		"source=C:\\Users\\thiss\\.vscode-server-insiders,target=/home/sayantan/.vscode-server-insiders,type=bind"
+		"source=C:\\Users\\thiss\\.vscode-server-insiders,target=/home/mritunjay/.vscode-server-insiders,type=bind"
 	],
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	"postCreateCommand": "/bin/zsh ./.devcontainer/scripts/post-create.sh",
 	// "postCreateCommand": "pwd & ls -la",
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	"remoteUser": "sayantan",
+	"remoteUser": "mritunjay",
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
